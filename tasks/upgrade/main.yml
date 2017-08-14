@@ -60,5 +60,10 @@
     - name: apply post docker upgrade converge workarounds
       command: "{{working_dir}}/post_docker_converge_upgrade_workarounds.sh"
       when: upgrade_workarounds
+
+    - name: run controller post upgrade steps
+      include: controller_post_upgrade.yml
+      tags: controller_post_upgrade
+      when: controller_upgrade_post|bool
   when: overcloud_upgrade|bool
 

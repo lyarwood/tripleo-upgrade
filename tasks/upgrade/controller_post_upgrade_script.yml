@@ -1,0 +1,6 @@
+---
+- name: create post upgrade script for {{ node_name }}
+  template:
+    src: controller_upgrade_post.sh.j2
+    dest: "{{working_dir}}/{{ node_name | splitext | first }}_upgrade_post.sh"
+    mode: 0775

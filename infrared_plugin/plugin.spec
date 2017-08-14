@@ -60,6 +60,21 @@ subparsers:
                       help: |
                           Migrate instances between compute nodes during upgrade.
                       default: true
+                  upgrade-controller-reboot:
+                      type: Bool
+                      help: |
+                          Reboot controller nodes post upgrade
+                      default: true
+                  upgrade-controller-post:
+                      type: Bool
+                      help: |
+                          Run controller post upgrade checks
+                      default: true
+                  upgrade-reboot-force:
+                      type: Bool
+                      help: |
+                          Hard reboot nodes during upgrade
+                      default: false
             - title: TripleO Update
               options:
                   overcloud-update:

@@ -74,5 +74,20 @@
          container_registry_file: "{{ install.deployment.files }}/docker-images.yaml"
       when: install.deployment.files
 
+    - name: Set upgrade controller reboot
+      set_fact:
+         controller_reboot: true
+      when: install.upgrade.controller.reboot
+
+    - name: Set upgrade controller post
+      set_fact:
+         controller_upgrade_post: true
+      when: install.upgrade.controller.post
+
+    - name: Set upgrade force reboot
+      set_fact:
+         force_reboot: true
+      when: install.upgrade.reboot.force
+
   roles:
     - tripleo-upgrade

@@ -120,3 +120,6 @@
 
 - name: Create upgrade scripts for non controller nodes
   include: non_controller_upgrade_scripts.yml
+
+- name: Create post upgrade scripts for controller nodes
+  include: controller_post_upgrade_scripts.yml

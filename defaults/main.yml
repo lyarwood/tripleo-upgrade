@@ -85,9 +85,11 @@ container_images_location: "{{ working_dir }}/container_images.yaml"
 
 # reboot nodes post upgrade
 undercloud_reboot: false
+controller_reboot: false
+force_reboot: false
 
 # time to wait for nodes to reboot in seconds
-node_reboot_timeout: 120
+node_reboot_timeout: 300
 
 # enable l3 agent connectivity check during upgrade
 l3_agent_connectivity_check: false
@@ -98,3 +100,6 @@ l3_agent_connectivity_check_stop_template: l3_agent_stop_ping.sh.j2
 
 # migrate instances between compute nodes during upgrade
 compute_evacuate: false
+
+# enable post upgrade checks
+controller_upgrade_post: false

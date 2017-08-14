@@ -1,0 +1,3 @@
+---
+- name: Running post upgrade steps for {{ node_name | splitext | first }}
+  shell: "{{working_dir}}/{{ node_name | splitext | first }}_upgrade_post.sh"
