@@ -75,6 +75,14 @@ subparsers:
                       help: |
                           Hard reboot nodes during upgrade
                       default: false
+                  upgrade-docker-local-registry:
+                      type: Bool
+                      help: Use local docker registry on the undercloud
+                      default: false
+                  upgrade-docker-registry-url:
+                      type: Value
+                      help: The alternative docker registry to use for deployment.
+                      default: 'registry.example.local'
             - title: TripleO Update
               options:
                   overcloud-update:

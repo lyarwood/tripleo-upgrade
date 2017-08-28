@@ -71,6 +71,9 @@ container_registry_file: "docker-images.yaml"
 # enable local docker registry
 use_local_docker_registry: true
 
+# url of the remote docker registry to be used
+docker_registry_url: 'registry.example.local'
+
 # use upstream or downstream container images
 upstream_container_images: true
 

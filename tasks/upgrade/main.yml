@@ -26,11 +26,12 @@
     # TODO: move this out of upgrade
     - name: download container images
       include: container_images.yaml
+      when: use_local_docker_registry
       tags: container_images
 
     - name: create local docker registry environment file
-      include: local_docker_registry_env.yaml
-      tags: local_docker_registry
+      include: docker_registry_images_env.yaml
+      tags: docker_registry_images_env
 
     - name: apply pre docker composable upgrade workarounds
       command: "{{working_dir}}/pre_docker_composable_upgrade_workarounds.sh"

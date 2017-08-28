@@ -17,6 +17,13 @@ REPO_URL="$(grep -B2 enabled=1 $REPO_FILE | grep -m1 puddle | sed -E 's/.*(http.
 curl -L -o {{ container_images_location }} $REPO_URL/latest_containers/container_images.yaml
 
 REGISTRY="$(grep pull_source {{ container_images_location }} | uniq | awk {'print $2'})"
+
+{% if docker_registry_url != 'registry.example.local' %}
+REMOTE_REGISTRY='{{ docker_registry_url }}'
+sed -i "s/$REGISTRY/$REMOTE_REGISTRY/" {{ container_images_location }}
+REGISTRY=$REMOTE_REGISTRY
+{% endif %}
+
 sudo sed -i -E "s/(--insecure-registry.*)\"/\1\ --insecure-registry\ $REGISTRY\"/" /etc/sysconfig/docker
 sudo systemctl restart docker
 

@@ -49,6 +49,15 @@
          upstream_container_images: false
       when: not install.upstream.container.images
 
+    - name: Set use docker local registry
+      set_fact:
+         use_local_docker_registry: false
+      when: not install.upgrade.docker.local.registry
+
+    - name: Set docker registry url
+      set_fact:
+         docker_registry_url: "{{ install.upgrade.docker.registry.url }}"
+
     - name: Set undercloud update
       set_fact:
         undercloud_update: true
