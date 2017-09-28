@@ -117,6 +117,7 @@
     src: ssh_config
     dest: "~/.ssh/config"
     mode: 0600
+  when: need_ssh_config|bool
 
 - name: Create upgrade scripts for non controller nodes
   include: non_controller_upgrade_scripts.yml

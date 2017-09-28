@@ -103,3 +103,6 @@ compute_evacuate: false
 
 # enable post upgrade checks
 controller_upgrade_post: false
+
+# Provide a custom ssh-config file
+need_ssh_config: true
