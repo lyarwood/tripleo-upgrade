@@ -31,3 +31,9 @@
       dest: "{{ ugstage.script }}"
       regexp: '^--log-file.*'
       state: absent
+
+- name: Remove timeout from {{ ugstage.step }} script
+  replace:
+      dest: "{{ ugstage.script }}"
+      regexp: 'timeout 100m '
+      replace: ''
