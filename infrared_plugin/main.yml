@@ -69,5 +69,10 @@
          compute_evacuate: true
       when: install.upgrade.compute.evacuate
 
+    - name: Set deployment-files base
+      set_fact:
+         container_registry_file: "{{ install.deployment.files }}/docker-images.yaml"
+      when: install.deployment.files
+
   roles:
     - tripleo-upgrade

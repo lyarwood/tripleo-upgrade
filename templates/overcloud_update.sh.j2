@@ -1,0 +1,8 @@
+#!/bin/env bash
+#
+# Run minor update on overcloud nodes
+#
+set -euo pipefail
+
+echo "Running minor update"
+openstack overcloud update stack 2>&1

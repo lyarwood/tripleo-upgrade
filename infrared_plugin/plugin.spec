@@ -72,3 +72,14 @@ subparsers:
                       help: |
                           Update Undercloud
                       default: false
+                  deployment-files:
+                      type: Value
+                      help: |
+                          Directory containing the templates of the overcloud deployment.
+                          Valid choices: 'virt', 'composable_role', 'ovb'
+                          Default: 'virt'
+                      choices:
+                          - virt
+                          - composable_role
+                          - ovb
+                      default: virt

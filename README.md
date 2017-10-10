@@ -182,10 +182,24 @@ Set up undercloud upgrade repositories:
         --mirror ${mirror_location} \
         --ansible-args="tags=upgrade_repos"
 
+Set up undercloud update repositories:
+
+    infrared tripleo-undercloud \
+        --update-undercloud yes \
+        --mirror ${mirror_location} \
+        --build latest \
+        --version 12 \
+        --ansible-args="tags=upgrade_repos"
+
 Upgrade undercloud:
 
     infrared tripleo-upgrade \
         --undercloud-upgrade yes
+
+Update undercloud:
+
+    infrared tripleo-upgrade \
+        --undercloud-update yes
 
 Set up overcloud upgrade repositories:
 
@@ -195,10 +209,22 @@ Set up overcloud upgrade repositories:
         --mirror ${mirror_location} \
         --ansible-args="tags=upgrade_collect_info,upgrade_repos"
 
+Set up overcloud update repositories/containers:
+
+    infrared tripleo-overcloud \
+        --deployment-files virt \
+        --ocupdate True \
+        --build latest \
+        --ansible-args="tags=update_collect_info,update_undercloud_validation,update_repos,update_prepare_containers"
+
 Upgrade overcloud:
 
     infrared tripleo-upgrade \
         --overcloud-upgrade yes
+
+Update overcloud:
+    infrared tripleo-upgrade \
+        --overcloud-update yes
 
 Running the role manually from the undercloud
 ---------------------------------------------

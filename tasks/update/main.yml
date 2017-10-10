@@ -2,12 +2,24 @@
 - name: create update scripts
   include: create-update-scripts.yaml
   tags: create_update_scripts
-  when: update_noop|bool or undercloud_update|bool
+  when: update_noop|bool or undercloud_update|bool or overcloud_update|bool
 
 - block:
+    - name: undercloud pre-update workarounds
+      shell: |
+          source {{ undercloud_rc }}
+          bash {{ pre_undercloud_update_workarounds_script }} &> {{ working_dir }}/uc_pre_update_workarounds.log
+      when: update_workarounds|bool
+
     - name: update undercloud
       shell: "bash {{ undercloud_update_script }} &> {{ working_dir }}/undercloud_update.log"
       tags: undercloud_update
+
+    - name: undercloud post-update workarounds
+      shell: |
+          source {{ undercloud_rc }}
+          bash {{ post_undercloud_update_workarounds_script }} &> {{ working_dir }}/uc_pre_update_workarounds.log
+      when: update_workarounds|bool
 
     - name: validate undercloud update
       include: ../upgrade/undercloud_validate_upgrade.yaml
@@ -15,3 +27,32 @@
 
   when: undercloud_update|bool
 
+- block:
+    - name: overcloud pre-update workarounds
+      shell: |
+          source {{ undercloud_rc }}
+          bash {{ pre_overcloud_update_workarounds_script }} &> {{ working_dir }}/pre_overcloud_update_workarounds.log
+      when: update_workarounds|bool
+
+    - name: setup HEAT outputs
+      shell: |
+          source {{ undercloud_rc }}
+          bash {{ overcloud_update_setup_script }} &> {{ working_dir }}/overcloud_update_setup.log
+      tags:
+          - overcloud_update
+          - overcloud_update_setup
+
+    - name: update overcloud
+      shell: |
+          source {{ undercloud_rc }}
+          bash {{ overcloud_update_script }} &> {{ working_dir }}/overcloud_update.log
+      tags:
+          - overcloud_update
+
+    - name: overcloud post-update workarounds
+      shell: |
+          source {{ undercloud_rc }}
+          bash {{ post_overcloud_update_workarounds_script }} &> {{ working_dir }}/post_overcloud_update_workarounds.log
+      when: update_workarounds|bool
+
+  when: overcloud_update|bool

@@ -17,6 +17,9 @@ overcloud_update: false
 # enable upgrade workarounds
 upgrade_workarounds: false
 
+# enable update workarounds
+update_workarounds: false
+
 # use oooq
 use_oooq: false
 
@@ -46,6 +49,24 @@ overcloud_converge_upgrade_script: "{{ working_dir }}/converge_docker_upgrade.sh
 container_images_download_script: "{{ working_dir }}/container_images_download.sh"
 local_docker_registry_env_script: "{{ working_dir }}/local_docker_registry_env.sh"
 workload_launch_script: "{{ working_dir }}/workload_launch.sh"
+
+# overcloud jinja template name
+overcloud_pre_update_workarounds_template: overcloud_pre_update_workarounds.sh.j2
+update_workarounds_template: update_workarounds.sh.j2
+overcloud_update_setup_template: overcloud_update_setup.sh.j2
+overcloud_update_template: overcloud_update.sh.j2
+
+# overcloud update scripts
+pre_undercloud_update_workarounds_script: "{{ working_dir }}/pre_undercloud_update_workarounds.sh"
+post_undercloud_update_workarounds_script: "{{ working_dir }}/post_undercloud_update_workarounds.sh"
+pre_overcloud_update_workarounds_script: "{{ working_dir }}/pre_overcloud_update_workarounds.sh"
+post_overcloud_update_workarounds_script: "{{ working_dir }}/post_overcloud_update_workarounds.sh"
+
+overcloud_update_setup_script: "{{ working_dir }}/overcloud_update_setup.sh"
+overcloud_update_script: "{{ working_dir }}/overcloud_update.sh"
+
+# container registry file
+container_registry_file: "docker-images.yaml"
 
 # enable local docker registry
 use_local_docker_registry: true
