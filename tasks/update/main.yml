@@ -1,1 +1,17 @@
 ---
+- name: create update scripts
+  include: create-update-scripts.yaml
+  tags: create_update_scripts
+  when: update_noop|bool or undercloud_update|bool
+
+- block:
+    - name: update undercloud
+      shell: "bash {{ undercloud_update_script }} &> {{ working_dir }}/undercloud_update.log"
+      tags: undercloud_update
+
+    - name: validate undercloud update
+      include: ../upgrade/undercloud_validate_upgrade.yaml
+      tags: undercloud_update_validate
+
+  when: undercloud_update|bool
+

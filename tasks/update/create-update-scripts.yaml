@@ -1,0 +1,7 @@
+---
+- name: create undercloud update script
+  template:
+    src: "{{ undercloud_update_template }}"
+    dest: "{{ undercloud_update_script }}"
+    mode: 0775
+
