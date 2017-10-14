@@ -81,6 +81,9 @@ elapsed_seconds=0
 while true; do
     if [ $STORAGE_BACKEND == 'ceph' ]; then
         echo "Shared storage live migrating {{ instance }} back to {{ node_name }} ..."
+        ## Live migration might not complete on the first run so we run it multiple times
+        ## until the instance ends back on the originating host
+        nova live-migration {{ instance }} {{ node_name }}
     else
         echo "Block migrating {{ instance }} back to {{ node_name }} ..."
         nova live-migration --block-migrate {{ instance }} {{ node_name }}
