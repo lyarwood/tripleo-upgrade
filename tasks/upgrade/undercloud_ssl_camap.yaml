@@ -17,15 +17,32 @@
   ignore_errors: True
 
 - block:
-    - name: register ssl certificate
+    - name: register ssl certificate location
       shell: |
-        cat $(grep 13000 /etc/haproxy/haproxy.cfg  | awk {'print $6'})
+        grep 13000 /etc/haproxy/haproxy.cfg  | awk {'print $6'}
       become: true
       become_user: root
       register: undercloudcert
 
-    - name: generate camap file
-      template:
-        src: undercloud_ssl_camap.yaml.j2
-        dest: "{{ working_dir }}/undercloud_ssl_camap.yaml"
+    - name: make a local copy of the certificate
+      copy:
+        src: "{{ undercloudcert.stdout }}"
+        dest: "{{ working_dir }}/undercloud.pem"
+        owner: stack
+        remote_src: true
+      become: true
+      become_user: root
+
+    - name: register overcloud nodes ip address
+      shell: |
+        source {{ undercloud_rc }}
+        openstack server list -f json | jq -r -c '.[] | .Networks' | grep -oP '[0-9.]+'
+      register: node_ip
+
+    - name: copy certificate to the overcloud nodes and update the trusted store
+      shell: |
+        scp -q -o StrictHostKeyChecking=no {{ working_dir }}/undercloud.pem heat-admin@{{ item }}:
+        ssh -q -o StrictHostKeyChecking=no heat-admin@{{ item }} 'sudo cp undercloud.pem /etc/pki/ca-trust/source/anchors/; sudo update-ca-trust extract'
+      with_items:
+        - "{{ node_ip.stdout_lines }}"
   when: uc_keystone_conn|failed
