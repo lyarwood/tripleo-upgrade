@@ -127,4 +127,4 @@
   include: non_controller_upgrade_scripts.yml
 
 - name: Create post upgrade scripts for controller nodes
-  include: controller_post_upgrade_scripts.yml
+  include: ../common/controller_post_scripts.yml
