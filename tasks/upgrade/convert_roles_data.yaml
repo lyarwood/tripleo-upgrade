@@ -15,24 +15,31 @@
         dest: "{{ custom_roles_file.stdout }}.pre_pike_upgrade"
         remote_src: true
 
-    - name: Assigns new attributes to Controller role
+    - name: Assigns deprecated params to Controller role
       replace:
         dest: '{{ custom_roles_file.stdout }}'
-        regexp: '^(- name: Controller.*)'
+        regexp: '^(- name: Controller$)'
         replace: "{{ item }}"
       with_items:
         - '\1\n  deprecated_param_image: "controllerImage"'
         - '\1\n  deprecated_param_flavor: "OvercloudControlFlavor"'
         - '\1\n  deprecated_param_extraconfig: "controllerExtraConfig"'
         - '\1\n  uses_deprecated_params: True'
+
+    - name: Assigns network attributes to Controller role or custom controller roles
+      replace:
+        dest: '{{ custom_roles_file.stdout }}'
+        regexp: '^(- name: Controller.*)'
+        replace: "{{ item }}"
+      with_items:
         - '\1\n  networks:\n    - External\n    - InternalApi\n    - Storage\n    - StorageMgmt\n    - Tenant'
         - '\1\n  tags:\n    - primary\n    - controller'
         - '\1\n  description: |\n    Controller role that has all the controler services loaded and handles\n    Database, Messaging and Network functions.'
 
-    - name: Assigns new attributes to Compute role
+    - name: Assigns deprecated params to Compute role
       replace:
         dest: '{{ custom_roles_file.stdout }}'
-        regexp: '^(- name: Compute.*)'
+        regexp: '^(- name: Compute$)'
         replace: "{{ item }}"
       with_items:
         - '\1\n  deprecated_server_resource_name: "NovaCompute"'
@@ -42,6 +49,13 @@
         - '\1\n  deprecated_param_extraconfig: "NovaComputeExtraConfig"'
         - '\1\n  deprecated_param_image: "NovaImage"'
         - '\1\n  uses_deprecated_params: True'
+
+    - name: Assigns network attributes to Compute role or custom compute roles
+      replace:
+        dest: '{{ custom_roles_file.stdout }}'
+        regexp: '^(- name: Compute.*)'
+        replace: "{{ item }}"
+      with_items:
         - '\1\n  networks:\n    - InternalApi\n    - Storage\n    - Tenant'
         - '\1\n  description: |\n    Basic Compute Node role'
 
@@ -63,10 +77,10 @@
         - '\1\n  networks:\n    - InternalApi\n    - Storage\n    - StorageMgmt'
         - '\1\n  description: |\n    Cinder Block Storage node role'
 
-    - name: Assigns new attributes to ObjectStorage role
+    - name: Assigns deprecated params to ObjectStorage role
       replace:
         dest: '{{ custom_roles_file.stdout }}'
-        regexp: '^(- name: ObjectStorage.*)'
+        regexp: '^(- name: ObjectStorage$)'
         replace: "{{ item }}"
       with_items:
         - '\1\n  deprecated_param_flavor: "OvercloudSwiftStorageFlavor"'
@@ -74,6 +88,13 @@
         - '\1\n  deprecated_param_ips: "SwiftStorageIPs"'
         - '\1\n  deprecated_param_metadata: "SwiftStorageServerMetadata"'
         - '\1\n  uses_deprecated_params: True'
+
+    - name: Assigns network attributes to ObjectStorage role or custom object storage roles
+      replace:
+        dest: '{{ custom_roles_file.stdout }}'
+        regexp: '^(- name: ObjectStorage.*)'
+        replace: "{{ item }}"
+      with_items:
         - '\1\n  networks:\n    - InternalApi\n    - Storage\n    - StorageMgmt'
         - '\1\n  description: |\n    Swift Object Storage node role'
 
