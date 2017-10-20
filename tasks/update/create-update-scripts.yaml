@@ -15,7 +15,7 @@
     - '{{ post_undercloud_update_workarounds|default([]) }}'
     - '{{ pre_overcloud_update_workarounds|default([]) }}'
     - '{{ post_overcloud_update_workarounds|default([]) }}'
-  when: update_workarounds|bool
+  when: updates_workarounds|bool
 
 
 - name: create overcloud update setup script

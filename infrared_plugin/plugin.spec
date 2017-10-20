@@ -95,6 +95,11 @@ subparsers:
                       help: |
                           Update Undercloud
                       default: false
+                  updates-workarounds:
+                      type: Bool
+                      help: |
+                          Apply updates  workarounds
+                      default: false
                   deployment-files:
                       type: Value
                       help: |

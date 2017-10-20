@@ -68,6 +68,11 @@
         overcloud_update: true
       when: install.overcloud.get('update', {})
 
+    - name: Set updates workarounds
+      set_fact:
+         updates_workarounds: true
+      when: install.updates.workarounds
+
     - name: Set upgrade floating ip check
       set_fact:
          l3_agent_connectivity_check: true

@@ -18,7 +18,7 @@ overcloud_update: false
 upgrade_workarounds: false
 
 # enable update workarounds
-update_workarounds: false
+updates_workarounds: false
 
 # use oooq
 use_oooq: false
