@@ -14,12 +14,14 @@ while true; do
     (( elapsed_seconds += 3 ))
     if [ $elapsed_seconds -ge $timeout_seconds ]; then
         echo "WARNING: galera pcs resource didn't get started after reboot. Trying to workaround BZ#1499677"
-        GVWSTATE_SIZE=$(ssh -q -o StrictHostKeyChecking=no heat-admin@$NODE_IP 'sudo wc -c /var/lib/mysql/gvwstate.dat' | awk {'print $1'})
+        GVWSTATE_SIZE=$(ssh -q -o StrictHostKeyChecking=no heat-admin@$NODE_IP 'sudo touch /var/lib/mysql/gvwstate.dat; sudo wc -c /var/lib/mysql/gvwstate.dat' | awk {'print $1'})
         if [ $GVWSTATE_SIZE -eq 0 ]; then
             echo "Removing gvwstate.dat"
             ssh -q -o StrictHostKeyChecking=no heat-admin@$NODE_IP 'sudo rm -f /var/lib/mysql/gvwstate.dat'
             echo "Rebooting node"
 {% if force_reboot %}
+            NOVA_ID=$(openstack server list | grep {{ node_name | splitext | first }} | awk {'print $2'})
+            IRONIC_ID=$(ironic node-list | grep $NOVA_ID | awk {'print $2'})
             ironic node-set-power-state $IRONIC_ID reboot
 {% else %}
             ssh -q -o StrictHostKeyChecking=no heat-admin@$NODE_IP 'sudo shutdown -r now'
