@@ -82,6 +82,12 @@
         dest: "{{ l3_agent_connectivity_check_stop_script }}"
         mode: 0775
 
+- name: register used service environment files
+  shell: |
+    grep '\-e\ \|\-\-environment-file\ ' {{ overcloud_deploy_script }} | awk {'print $2'} | grep environments/services
+  register: services
+  ignore_errors: true
+
 - name: create container images download script
   template:
     src: "{{ container_images_download_template }}"
