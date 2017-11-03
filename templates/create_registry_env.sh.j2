@@ -32,10 +32,16 @@ openstack overcloud container image prepare \
   --suffix=-docker \
   --tag="$TAG" \
 {% if use_local_docker_registry  %}
+{% for envs in services.stdout_lines|default([]) %}
+  --service-environment-file={{envs}} \
+{% endfor %}
   --namespace={{ ansible_br_ctlplane.ipv4.address }}:8787/rhosp12
 echo >> {{ containers_default_parameters }} '  DockerInsecureRegistryAddress: {{ ansible_br_ctlplane.ipv4.address }}:8787'
 echo >> {{ containers_default_parameters }} '  DockerCephDaemonImage: {{ ansible_br_ctlplane.ipv4.address }}:8787/ceph/rhceph-2-rhel7:latest'
 {% else %}
+{% for envs in services.stdout_lines|default([]) %}
+  --service-environment-file={{envs}} \
+{% endfor %}
   --namespace=$REGISTRY/rhosp12
 echo >> {{ containers_default_parameters }} "  DockerInsecureRegistryAddress: $REGISTRY"
 echo >> {{ containers_default_parameters }} "  DockerCephDaemonImage: $REGISTRY/ceph/rhceph-2-rhel7:latest"
