@@ -136,8 +136,6 @@ scripts using this example playbook (duplicate from
 
     ---
     - hosts: undercloud
-      vars:
-        - overcloud_deploy_script: overcloud-deploy-command.sh
       gather_facts: true
       become: yes
       become_method: sudo
