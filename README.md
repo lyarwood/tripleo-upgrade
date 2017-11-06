@@ -107,6 +107,9 @@ URL of the image used for the workload instance.
 
 Amount of memory assigned for the workload instance.
 
+    tripleo_ci: false
+
+Set to true when running the role in the TripleO CI jobs. It avoids losing connectivity to the undercloud by skipping reboot and ssh kill tasks.
 
 Dependencies
 ------------
