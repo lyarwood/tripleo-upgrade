@@ -23,6 +23,12 @@
     regexp: environments/storage-environment.yaml
     replace: environments/ceph-ansible/ceph-ansible.yaml
 
+- name: replace ceph radosgw with ceph ansible radosgw environment
+  replace:
+    dest: "{{ overcloud_deploy_script }}"
+    regexp: environments/ceph-radosgw.yaml
+    replace: environments/ceph-ansible/ceph-rgw.yaml
+
 - name: replace external ceph environment with ceph ansible environment
   replace:
     dest: "{{ overcloud_deploy_script }}"
