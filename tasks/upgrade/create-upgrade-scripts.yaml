@@ -41,6 +41,17 @@
 - name: Adjust custom roles data file during upgrade
   include: convert_roles_data.yaml
 
+- name: check if dpdk is enabled
+  command: "grep -Fq environments/neutron-ovs-dpdk.yaml {{ overcloud_deploy_script }}"
+  register: dpdk_env
+  ignore_errors: true
+
+- name: create dpdk env required for upgrade
+  template:
+    src: "dpdk-upgrade-env.yaml.j2"
+    dest: "{{working_dir}}/dpdk-upgrade-env.yaml"
+  when: dpdk_env|succeeded
+
 - name: check if undercloud is ssl enabled
   command: "grep -Fq OS_AUTH_URL=https {{ undercloud_rc }}"
   register: undercloud_ssl
@@ -119,6 +130,7 @@
         - "{{ tht_directory }}/environments/major-upgrade-composable-steps-docker.yaml"
         - "{% if ceph_env is defined %}{{ working_dir }}/ceph-ansible-env.yaml{% endif %}"
         - "{% if not upstream_container_images or (upstream_container_images and use_local_docker_registry) %}{{ containers_default_parameters }}{% endif %}"
+        - "{% if dpdk_env|succeeded %}{{working_dir}}/dpdk-upgrade-env.yaml{% endif %}"
     - step: "Docker containers converge upgrade"
       script: "{{ overcloud_converge_upgrade_script }}"
       environment_file:
@@ -127,6 +139,7 @@
         - "{{ tht_directory }}/environments/major-upgrade-converge-docker.yaml"
         - "{% if ceph_env is defined %}{{ working_dir }}/ceph-ansible-env.yaml{% endif %}"
         - "{% if not upstream_container_images or (upstream_container_images and use_local_docker_registry) %}{{ containers_default_parameters }}{% endif %}"
+        - "{% if dpdk_env|succeeded %}{{working_dir}}/dpdk-upgrade-env.yaml{% endif %}"
 
 - name: adjust ssh config to skip host key check
   copy:
