@@ -20,18 +20,16 @@
   become_user: root
   register: loaded_ovs
 
-- name: reboot the undercloud
-  shell: "sleep 2 && shutdown -r now"
-  async: 1
-  poll: 0
-  ignore_errors: true
-  become: true
-  become_user: root
-  when:
-    - undercloud_reboot or (installed_kernel.stdout != loaded_kernel.stdout) or (installed_ovs.stdout != loaded_ovs.stdout)
-  tags: undercloud_reboot
-
 - block:
+
+      - name: reboot the undercloud
+        shell: "sleep 2 && shutdown -r now"
+        async: 1
+        poll: 0
+        ignore_errors: true
+        become: true
+        become_user: root
+
       - name: waiting for the undercloud to be available
         become: no
         wait_for:
@@ -62,5 +60,5 @@
         delegate_to: virthost
         when: "'virthost' in groups"
   when:
-    - undercloud_reboot or (installed_kernel.stdout != loaded_kernel.stdout) or (installed_ovs.stdout != loaded_ovs.stdout)
+    - not tripleo_ci and (undercloud_reboot or (installed_kernel.stdout != loaded_kernel.stdout) or (installed_ovs.stdout != loaded_ovs.stdout))
   tags: undercloud_reboot
