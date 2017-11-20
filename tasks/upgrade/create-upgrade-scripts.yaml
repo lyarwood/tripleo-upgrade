@@ -90,7 +90,7 @@
 
 - name: register used service environment files
   shell: |
-    grep '\-e\ \|\-\-environment-file\ ' {{ overcloud_deploy_script }} | awk {'print $2'} | grep environments/services
+    grep '\-e\ \|\-\-environment-file\ ' {{ overcloud_deploy_script }} | awk {'print $2'} | grep -E 'environments/services|environments/storage|environments/ceph-ansible'
   register: services
   ignore_errors: true
 
