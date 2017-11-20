@@ -9,7 +9,6 @@ openstack overcloud container image prepare \
   --env-file {{ containers_default_parameters }} \
 {% if use_local_docker_registry  %}
   --namespace={{ ansible_br_ctlplane.ipv4.address }}:8787/tripleoupstream
-echo >> {{ containers_default_parameters }} '  DockerInsecureRegistryAddress: {{ ansible_br_ctlplane.ipv4.address }}:8787'
 {% else %}
 {% if docker_registry_url != 'registry.example.local' %}
   --namespace {{ docker_registry_url }}/tripleoupstream
@@ -37,14 +36,12 @@ openstack overcloud container image prepare \
   --service-environment-file={{envs}} \
 {% endfor %}
   --namespace={{ ansible_br_ctlplane.ipv4.address }}:8787/rhosp12
-echo >> {{ containers_default_parameters }} '  DockerInsecureRegistryAddress: {{ ansible_br_ctlplane.ipv4.address }}:8787'
 echo >> {{ containers_default_parameters }} '  DockerCephDaemonImage: {{ ansible_br_ctlplane.ipv4.address }}:8787/ceph/rhceph-2-rhel7:latest'
 {% else %}
 {% for envs in services.stdout_lines|default([]) %}
   --service-environment-file={{envs}} \
 {% endfor %}
   --namespace=$REGISTRY/rhosp12
-echo >> {{ containers_default_parameters }} "  DockerInsecureRegistryAddress: $REGISTRY"
 echo >> {{ containers_default_parameters }} "  DockerCephDaemonImage: $REGISTRY/ceph/rhceph-2-rhel7:latest"
 {% endif %}
 {% endif %}
