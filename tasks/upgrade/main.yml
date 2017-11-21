@@ -36,6 +36,7 @@
     - name: apply pre docker composable upgrade workarounds
       command: "{{working_dir}}/pre_docker_composable_upgrade_workarounds.sh"
       when: upgrade_workarounds
+      tags: docker_composable_upgrade
 
     - include: docker_composable_upgrade.yml
       tags: docker_composable_upgrade
@@ -43,6 +44,7 @@
     - name: apply pre nova compute upgrade workarounds
       command: "{{working_dir}}/pre_nova_compute_upgrade_workarounds.sh"
       when: upgrade_workarounds
+      tags: nova_compute_upgrade
 
     - name: upgrade nova compute nodes
       include: compute_upgrade.yml
@@ -55,12 +57,15 @@
     - name: apply pre docker upgrade converge workarounds
       command: "{{working_dir}}/pre_docker_converge_upgrade_workarounds.sh"
       when: upgrade_workarounds
+      tags: docker_converge_upgrade
 
     - include: docker_converge_upgrade.yml
+      tags: docker_converge_upgrade
 
     - name: apply post docker upgrade converge workarounds
       command: "{{working_dir}}/post_docker_converge_upgrade_workarounds.sh"
       when: upgrade_workarounds
+      tags: docker_converge_upgrade
 
     - name: run controller post upgrade steps
       include: controller_post_upgrade.yml
