@@ -1,6 +1,6 @@
 ---
 - name: check if ceph ansible is enabled
-  command: "grep -Fq ceph-ansible.yaml {{ overcloud_deploy_script }}"
+  command: "grep -Eq 'ceph-ansible.yaml|storage-environment.yaml' {{ overcloud_deploy_script }}"
   register: ceph_ansible
   ignore_errors: true
 

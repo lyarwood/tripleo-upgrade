@@ -22,6 +22,7 @@
     dest: "{{ overcloud_deploy_script }}"
     regexp: environments/storage-environment.yaml
     replace: environments/ceph-ansible/ceph-ansible.yaml
+  when: upstream_container_images|bool
 
 - name: replace ceph radosgw with ceph ansible radosgw environment
   replace:
@@ -34,6 +35,14 @@
     dest: "{{ overcloud_deploy_script }}"
     regexp: environments/puppet-ceph-external.yaml
     replace: environments/ceph-ansible/ceph-ansible-external.yaml
+  when: upstream_container_images|bool
+
+- name: replace external ceph environment with new external ceph environment
+  replace:
+    dest: "{{ overcloud_deploy_script }}"
+    regexp: environments/puppet-ceph-external.yaml
+    replace: environments/storage-environment-external.yaml
+  when: not upstream_container_images|bool
 
 - name: Convert Ceph parameters to ceph ansible
   include: convert_ceph_params.yaml
