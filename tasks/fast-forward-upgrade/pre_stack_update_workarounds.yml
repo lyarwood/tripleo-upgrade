@@ -1,0 +1,16 @@
+- name: Remove legacy hiera data
+  command: sudo rm -rf /usr/libexec/os-apply-config/templates/etc/puppet/hiera.yaml /usr/libexec/os-refresh-config/configure.d/40-hiera-datafiles /etc/puppet/hieradata/*.yaml
+  delegate_to: overcloud
+
+- name: Update heat-agents on overcloud nodes
+  command: |
+  sudo yum install -y \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/openstack-heat-agents-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/python-heat-agent-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/python-heat-agent-ansible-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/python-heat-agent-apply-config-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/python-heat-agent-docker-cmd-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/python-heat-agent-hiera-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/python-heat-agent-json-file-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm \
+https://trunk.rdoproject.org/centos7-ocata/current-tripleo/python-heat-agent-puppet-1.0.1-0.20170412210405.769d0de.el7.centos.noarch.rpm
+  delegate_to: overcloud

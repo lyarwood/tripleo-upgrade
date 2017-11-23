@@ -1,0 +1,10 @@
+#!/bin/env bash
+set -euo pipefail
+
+echo "Updating stack for fast-forward upgrade"
+openstack overcloud deploy --templates {{ tht_directory }} \
+    {{ envs.stdout }} \
+    -e {{ tht_directory }}/environments/docker.yaml \
+    -e {{ working_dir }}/{{ container_registry_file }} \
+    -e {{ tht_directory }}/environments/fast-forward-upgrade.yaml \
+    -e {{ tht_directory }}/environments/noop-deploy-steps.yaml 2>&1

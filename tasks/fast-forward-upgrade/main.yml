@@ -1,0 +1,15 @@
+- name: ffu overcloud minor update
+  include: ../update/main.yml 
+  when: overcloud_update|bool 
+
+- name: ffu undercloud upgrade
+  include: undercloud-upgrade.yml
+  delegate_to: undercloud
+  loop_control:
+    loop_var: release
+  with_items: "{{ ffu_undercloud_releases }}"
+  when: ffu_undercloud_upgrade|bool
+
+- name: ffu overcloud upgrade
+  include_tasks: overcloud-upgrade.yml
+  when: ffu_overcloud_upgrade|bool

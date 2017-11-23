@@ -1,0 +1,35 @@
+- name: Apply stack update workarounds
+  include_tasks: pre_stack_update_workarounds.yml
+  when: ffu_workarounds|bool
+
+- name: Update tripleo-heat-templates on undercloud
+  git:
+    repo: 'git://git.openstack.org/openstack/tripleo-heat-templates'
+    dest: '{{ tht_directory }}'
+    refspec: '{{ ffu_tht_refspec }}'
+  delegate_to: undercloud
+
+- name: Register environments used during deployment
+  shell: |
+    grep -oh '\-e\ .*\.yaml\ ' overcloud_deploy.log
+  register: envs
+  delegate_to: undercloud
+
+#- name: Apply fast-forward workarounds
+#  include_tasks: pre_fast_forward_workarounds.yml
+#  when: ffu_workarounds|bool
+#
+#- name: Apply upgrade workarounds
+#  include_tasks: pre_upgrade_workarounds.yml
+#  when: ffu_workarounds|bool
+#
+#- name: Apply deploy workarounds
+#  include_tasks: pre_deploy_workarounds.yml
+#  when: ffu_workarounds|bool
+
+#- name: Workarounds pre-ffu
+#- name: Run fast-forward playbook
+#- name: Workarounds pre-upgrade
+#- name: Run upgrade playbook
+#- name: Workarounds pre-deploy
+#- name: Run deploy playbook

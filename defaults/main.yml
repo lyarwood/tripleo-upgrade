@@ -112,3 +112,23 @@ controller_upgrade_post: false
 
 # Provide a custom ssh-config file
 need_ssh_config: true
+
+# enable ffu upgrade
+ffu_undercloud_upgrade: false
+ffu_overcloud_upgrade: false
+
+# ffu undercloud upgrade
+ffu_undercloud_releases: ['ocata', 'pike', 'queens']
+ffu_undercloud_repo_type: tripleo-repos
+ffu_undercloud_repo_args:
+  tripleo_repos: 
+    - release: ocata
+      args: -b ocata current
+    - release: pike
+      args: -b pike current
+    - release: queens
+      args: current
+
+# Current THT review to use for FFU
+ffu_tht_refspec: 'refs/changes/00/523400/1'
+ffu_workarounds: true

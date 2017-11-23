@@ -1,0 +1,24 @@
+- name: Use tripleo-repos to configure undercloud repos
+  block:
+    - name: clone tripleo-repos
+      git:
+        repo: https://github.com/openstack/tripleo-repos.git
+        dest: /home/stack/tripleo-repos/
+    - name: install tripleo-repos
+      command: python setup.py install
+      args:
+        chdir: /home/stack/tripleo-repos/
+    - name: Enable tripleo-repos
+      command: tripleo-repos {{ cmd_args | join(' ') }}
+      vars:
+        query: "tripleo_repos[?release=='{{release}}'].args"
+        cmd_args: "{{ ffu_undercloud_repo_args | json_query(query) }}"
+  when: ffu_undercloud_repo_type == 'tripleo-repos'
+- name: Stop undercloud services (only on Ocata)
+  command: systemctl stop openstack-* neutron-* httpd
+  when: release == 'ocata'
+- name: Update undercloud packages
+  command: yum update -y instack-undercloud openstack-puppet-modules openstack-tripleo-common python-tripleoclient
+- name: Run undercloud upgrade
+  become: false
+  command: openstack undercloud upgrade > undercloud_upgrade_'{{ release }}'.log
